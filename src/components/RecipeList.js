@@ -9,7 +9,11 @@ class RecipeList extends Component {
 
         return (
             <React.Fragment>
-                <RecipeSearch/>
+                <RecipeSearch
+                    value={this.props.value}
+                    handleChange={this.props.handleChange}
+                    handleSubmit={this.props.handleSubmit}
+                />
 
                 <Container my="5">
                     {/* title */}

@@ -1,7 +1,5 @@
-import recipesTemp from "./recipesTemp";
-
-export default uri => {
-        return recipesTemp.find(element => {
+export default (uri, recipes) => {
+        return recipes.find(element => {
         return element.recipe.uri === uri;
     });
 }

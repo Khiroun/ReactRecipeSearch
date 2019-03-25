@@ -6,18 +6,13 @@ import tempDetails from "../tempDetails";
 
 
 class RecipeDetails extends Component {
-    constructor(props){
-        super(props);
-        this.state =  {
-            recipe: tempDetails(this.props.id).recipe,
-            ingredients : tempDetails(this.props.id).recipe.ingredientLines
-        }
-
-    }
-
 
     render() {
-        const {image, label, shareAs, source, url} = this.state.recipe;
+        console.log(this.props.recipes);
+        const recipe =  tempDetails(this.props.id, this.props.recipes).recipe;
+        const ingredients = recipe.ingredientLines;
+
+        const {image, label, shareAs, source, url} = recipe;
         const {handleIndex} = this.props;
         return (
             <React.Fragment>
@@ -46,7 +41,7 @@ class RecipeDetails extends Component {
                             <ul className="list-group mt-4">
                                 <h2 className="mt-3 mb-4">Ingredients</h2>
                                 {
-                                    this.state.ingredients.map((item, index) =>{
+                                    ingredients.map((item, index) =>{
                                         return (
                                             <li key={index} className="list-group-item text-slanted">{item}</li>
                                         )

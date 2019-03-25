@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Container, Row, Col, Form, InputGroup, Label, Input, Button, InputGroupText} from "reactstrap";
+import {Container, Row, Col, Form, InputGroup, Label, Input, Button} from "reactstrap";
 
 class RecipeSearch extends Component {
     render() {
@@ -12,10 +12,16 @@ class RecipeSearch extends Component {
                                 Search For recipes with{" "}
                                 <strong className="text-danger">Samira tv</strong>
                             </h1>
-                            <Form>
+                            <Form onSubmit={this.props.handleSubmit}>
                                 <Label for="search" className="text-capitalize">type recipes separated by comma</Label>
                                 <InputGroup>
-                                    <Input type="text" name="search" placeholder="chicken, onion, carrots" />
+                                    <Input
+                                        type="text"
+                                        name="search"
+                                        placeholder="chicken, onion, carrots"
+                                        onChange={this.props.handleChange}
+                                        value={this.props.value}
+                                    />
                                     <div className="input-group-append">
                                         <Button className="bg-primary text-white input-group-text">
                                             <i className="fas fa-search"></i>

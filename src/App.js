@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './App.css';
 import RecipeList from "./components/RecipeList";
 import RecipeDetails from "./components/RecipeDetails";
-import recipesTemp from "./recipesTemp";
 
 
 class App extends Component {
@@ -10,9 +9,12 @@ class App extends Component {
     super(props);
     this.state = {
       recipes : [],
-      url : 'https://api.edamam.com/search?q=chicken&app_id=7b133516&app_key=f810a623f3fe47dbe075efb04d2b7f37&from=0&to=60',
-        recipe_id: 'http://www.edamam.com/ontologies/edamam.owl#recipe_b79327d05b8e5b838ad6cfd9576b30b6',
-      pageIndex : 0
+      url : 'https://api.edamam.com/search?q=chicken&app_id=7b133516&app_key=f810a623f3fe47dbe075efb04d2b7f37&from=0&to=30',
+      base_url : 'https://api.edamam.com/search?app_id=7b133516&app_key=f810a623f3fe47dbe075efb04d2b7f37&from=0&to=30',
+      query: '&q=',
+      recipe_id: 'http://www.edamam.com/ontologies/edamam.owl#recipe_b79327d05b8e5b838ad6cfd9576b30b6',
+      pageIndex : 0,
+      search : ''
     }
 
   }
@@ -22,17 +24,34 @@ class App extends Component {
   }
 
     getRecipes = () => {
-      this.setState({
-          recipes: recipesTemp
-      })
+    fetch(this.state.url)
+        .then(data => {
+          return data.json();
+        })
+        .then(result =>{
+          this.setState({
+            recipes: result.hits
+          })
+        })
   };
 
   displayPage = index => {
     switch (index) {
       case 0 :
-        return <RecipeList recipes={this.state.recipes} handleDetails={this.handleDetails} />;
+        return <RecipeList
+            recipes={this.state.recipes}
+            handleDetails={this.handleDetails}
+            value={this.state.search}
+            handleChange={this.handleChange}
+            handleSubmit={this.handleSubmit}
+        />;
       case 1 :
-        return <RecipeDetails id={this.state.recipe_id} handleIndex={this.handleIndex} />
+        return <RecipeDetails
+            id={this.state.recipe_id}
+            handleIndex={this.handleIndex}
+            recipes={this.state.recipes}
+        />;
+      default:
     }
   };
 
@@ -47,6 +66,22 @@ class App extends Component {
     recipe_id: id,
     pageIndex: index
     })
+  };
+
+  handleChange = (e) =>{
+    this.setState({
+      search : e.target.value
+    })
+  };
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    const {base_url, query, search} = this.state;
+    this.setState(() =>{
+      return {url: base_url + query + search,
+              search : ''
+      }
+    }, () =>{this.getRecipes(); console.log(this.state.url)});
   };
 
   render() {
